@@ -1,26 +1,60 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {connect} from 'react-redux';
+import {store} from "./index";
+import {initState} from "./actions/init";
+import ProductsList from './components/ProductsList';
+import {PRODUCTS, SHOPPING_CART, changePage} from "./actions/changePage";
+import ShoppingCart from "./components/ShoppingCart";
+import {changeOrderItemsCount} from "./actions/changeOrderItemsCount";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    render() {
+        const {order, products, currentPage} = this.props;
+        return (
+            <div className="main-block">
+                {currentPage === PRODUCTS ? <h1>Список товаров</h1> : <h1>Корзина</h1>}
+                {
+                    currentPage === PRODUCTS && (
+                        <ProductsList
+                            changeOrderItemsCount={changeOrderItemsCount()}
+                            products={products}
+                            orderItems={order.items}
+                            changePage={changePage}
+                        />
+                    )
+                }
+                {
+                    currentPage === SHOPPING_CART && (
+                        <ShoppingCart
+                            changeOrderItemsCount={changeOrderItemsCount()}
+                            products={products}
+                            orderItems={order.items}
+                            changePage={changePage}
+                        />
+                    )
+                }
+
+            </div>
+        )
+    }
+
+    componentDidMount() {
+        store.dispatch(initState());
+    }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        products: state.products,
+        currentPage: state.currentPage,
+        order: []
+    }
+};
+
+const mapDispatchToProps = {
+    changePage,
+    changeOrderItemsCount
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
