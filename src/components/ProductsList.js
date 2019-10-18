@@ -4,12 +4,22 @@ import {changePage} from "../actions/changePage";
 import {connect} from 'react-redux';
 import ProductsRow from "./ProductsRow";
 import {changeOrderItemsCount} from "../actions/changeOrderItemsCount";
+import {store} from "../index";
+import {searchAction} from "../actions/filterSearch";
 
 class ProductsList extends React.Component {
     render() {
-        const {changePage, products, order, changeOrderItemsCount} = this.props;
+        const {changePage, products, order, changeOrderItemsCount, search} = this.props;
         return (
             <div>
+                <div className="md-form mb-3 mt-0">
+                    <input
+                        className="form-control"
+                        placeholder="Search"
+                        value={search}
+                        onChange={(e) => store.dispatch(searchAction(e.target.value))}
+                    />
+                </div>
                 <div className='row'>
                     <span className='col'>Название</span>
                     <span className='col p-0'>Цена</span>
@@ -18,10 +28,14 @@ class ProductsList extends React.Component {
                 </div>
                 <hr/>
                 {
-                    products.map((product, idx) => {
-                        let orderItem = order.find(function (item) {
-                            return item.product.id === product.id;
-                        });
+                    products
+                        .filter(item => {
+                            return item.name.toLowerCase().includes(search.toLowerCase())
+                        })
+                        .map((product, idx) => {
+                            let orderItem = order.find(function (item) {
+                                return item.product.id === product.id;
+                            });
                         return <ProductsRow
                             changeOrderItemsCount={changeOrderItemsCount}
                             key={idx}
@@ -47,7 +61,8 @@ const mapStateToProps = (state) => {
     return {
         products: state.products,
         currentPage: state.currentPage,
-        order: []
+        order: [],
+        search: state.search
     }
 };
 
