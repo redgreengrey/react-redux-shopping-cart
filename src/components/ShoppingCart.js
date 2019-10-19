@@ -10,7 +10,7 @@ import {store} from "../index";
 export class ShoppingCart extends React.Component {
     getOrderTotal = function () {
         const {order} = this.props;
-        return order.items !== undefined && order.items.reduce((total, orderItem) => {
+        return !!order && order.reduce((total, orderItem) => {
             if (!!orderItem) {
                 total = parseInt(total) + parseInt(orderItem.count) * parseInt(orderItem.item.price);
             }
@@ -55,8 +55,8 @@ export class ShoppingCart extends React.Component {
                 </div>
                 <hr/>
                 {
-                    order.items.map((product, idx) => {
-                        let orderItem = order.items.find(function (item) {
+                    order.map((product, idx) => {
+                        let orderItem = order.find(function (item) {
                             return item.product === product;
                         });
                         return <ProductsRow

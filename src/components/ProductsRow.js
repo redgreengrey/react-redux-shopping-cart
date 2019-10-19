@@ -20,7 +20,7 @@ export class ProductsRow extends React.Component {
 
     render() {
         const {order, item, currentPage} = this.props;
-        let found = order.items.filter(orderItem => orderItem.item.id === item.id);
+        let found = order.filter(orderItem => orderItem.item.id === item.id);
         if (currentPage === PRODUCTS) {
             return (
                 <div className="row">
