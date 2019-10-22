@@ -5,7 +5,8 @@ import {changePage} from "../actions/changePage";
 import {changeOrderItemsCount} from "../actions/changeOrderItemsCount";
 import {clearShoppingCart} from "../actions/clearShoppingCart";
 import {connect} from 'react-redux';
-import {store} from "../index";
+// import {store} from "../index";
+// import {removeItemFromCart} from "../actions/removeFromShoppingCart";
 
 export class ShoppingCart extends React.Component {
     getOrderTotal = function () {
@@ -17,28 +18,31 @@ export class ShoppingCart extends React.Component {
             return total;
         }, 0);
     };
+    handleClearShoppingCartOnClick = () => {
+        this.props.clearShoppingCart();
+    };
+    handleChangePageOnClick = () => {
+        this.props.changePage(PRODUCTS)
+    };
 
-    clearShoppingCart() {
-        return function () {
-            store.dispatch(clearShoppingCart());
-        }
-    }
 
     render() {
         const {
             order,
             changeOrderItemsCount,
             clearShoppingCartRow,
-            changePage,
         } = this.props;
 
-        if (order.items !== undefined && order.items.length === 0) {
+        if (!!order && order.length === 0) {
             return (
                 <div className='d-flex flex-sm-column'>
                     <div>
-                        Ваша корзина пуста
+                        В корзине нет товаров.
                     </div>
-                    <button onClick={() => changePage(PRODUCTS)} className='btn btn-dark col-6 mt-2'>
+                    <button
+                        onClick={this.handleChangePageOnClick}
+                        className='btn btn-dark col-6 mt-2'
+                    >
                         К списку продуктов
                     </button>
                 </div>
@@ -70,12 +74,15 @@ export class ShoppingCart extends React.Component {
                 }
                 <div className='d-flex justify-content-between'>
                     <button
-                        onClick={() => changePage(PRODUCTS)}
+                        onClick={this.handleChangePageOnClick}
                         className='btn btn-dark'
                     >
                         К списку продуктов
                     </button>
-                    <button className='btn btn-danger' onClick={this.clearShoppingCart()}>
+                    <button
+                        className='btn btn-danger'
+                        onClick={this.handleClearShoppingCartOnClick}
+                    >
                         Очистить корзину
                     </button>
                 </div>
@@ -103,9 +110,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    changePage,
+    changePage: page => (changePage(page)),
     changeOrderItemsCount,
-    clearShoppingCart
+    clearShoppingCart: () => (clearShoppingCart())
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart)

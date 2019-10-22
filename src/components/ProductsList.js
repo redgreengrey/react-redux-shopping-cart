@@ -3,13 +3,18 @@ import {SHOPPING_CART} from "../actions/changePage";
 import {changePage} from "../actions/changePage";
 import {connect} from 'react-redux';
 import ProductsRow from "./ProductsRow";
-import {changeOrderItemsCount} from "../actions/changeOrderItemsCount";
-import {store} from "../index";
 import {searchAction} from "../actions/filterSearch";
 
 class ProductsList extends React.Component {
+    handleSearchOnChange = (event) => {
+        this.props.searchAction(event.currentTarget.value);
+    };
+    handleChangePage = () => {
+        this.props.changePage()
+    };
+
     render() {
-        const {changePage, products, order, changeOrderItemsCount, search} = this.props;
+        const {products, order, changeOrderItemsCount, search} = this.props;
         return (
             <div>
                 <div className="md-form mb-3 mt-0">
@@ -17,7 +22,7 @@ class ProductsList extends React.Component {
                         className="form-control"
                         placeholder="Search"
                         value={search}
-                        onChange={(e) => store.dispatch(searchAction(e.target.value))}
+                        onChange={this.handleSearchOnChange}
                     />
                 </div>
                 <div className='row'>
@@ -30,7 +35,7 @@ class ProductsList extends React.Component {
                 {
                     products
                         .filter(item => {
-                            return item.name.toLowerCase().includes(search.toLowerCase())
+                            return /*!!search && */item.name.toLowerCase().includes(search.toLowerCase())
                         })
                         .map((product, idx) => {
                             let orderItem = order.find(function (item) {
@@ -46,7 +51,7 @@ class ProductsList extends React.Component {
                 }
                 <div className='d-flex justify-content-between'>
                     <button
-                        onClick={() => changePage(SHOPPING_CART)}
+                        onClick={this.handleChangePage}
                         className='btn btn-dark'
                     >
                         В корзину
@@ -67,8 +72,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    changePage,
-    changeOrderItemsCount
+    changePage: () => (changePage(SHOPPING_CART)),
+    searchAction: value => (searchAction(value))
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsList)

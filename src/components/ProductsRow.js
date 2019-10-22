@@ -3,20 +3,18 @@ import {PRODUCTS, SHOPPING_CART} from "../actions/changePage";
 import {connect} from 'react-redux';
 import {changeOrderItemsCount} from "../actions/changeOrderItemsCount";
 import {removeItemFromCart} from "../actions/removeFromShoppingCart";
-import {store} from "../index";
 
 export class ProductsRow extends React.Component {
-    changeOrderItemsCount(increase, product) {
-        return function () {
-            store.dispatch(changeOrderItemsCount(increase, product));
-        }
-    }
-
-    removeItemFromCart(id) {
-        return function () {
-            store.dispatch(removeItemFromCart(id));
-        }
-    }
+    handleIncreaseOnClick = () => {
+        this.props.changeOrderItemsCount(1, this.props.item)
+    };
+    handleDecreaseOnClick = () => {
+        console.log(this.props.item);
+        this.props.changeOrderItemsCount(-1, this.props.item.item)
+    };
+    handleRemoveItemFromCartOnClick = () => {
+        this.props.removeItemFromCart(this.props.item.item.id)
+    };
 
     render() {
         const {order, item, currentPage} = this.props;
@@ -30,7 +28,7 @@ export class ProductsRow extends React.Component {
                     <span className="col-3">
                     <button
                         className="btn btn-secondary ml-1"
-                        onClick={this.changeOrderItemsCount(1, item)}
+                        onClick={this.handleIncreaseOnClick} // refactor
                     >
                         +
                     </button>
@@ -46,13 +44,13 @@ export class ProductsRow extends React.Component {
                     <span className='col-3'>
                         <button
                             className='btn btn-secondary'
-                            onClick={this.changeOrderItemsCount(-1, item.item)}
+                            onClick={this.handleDecreaseOnClick}  // refactor
                         >
                             -
                         </button>
                         <button
                             className='btn btn-danger ml-1'
-                            onClick={this.removeItemFromCart(item.item.id)}
+                            onClick={this.handleRemoveItemFromCartOnClick}  // refactor
                         >
                             &times;
                         </button>
@@ -72,8 +70,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    changeOrderItemsCount,
-    removeItemFromCart
+    changeOrderItemsCount: (increase, product) => (changeOrderItemsCount(increase, product)),  // refactor
+    removeItemFromCart: (id) => (removeItemFromCart(id)) //////////////////////////////////////// refactor
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsRow)

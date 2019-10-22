@@ -10,14 +10,14 @@ import {changeOrderItemsCount} from "./actions/changeOrderItemsCount";
 
 class App extends React.Component {
     render() {
-        const {order, products, currentPage} = this.props;
+        const {order, products, currentPage, changeOrderItemsCount} = this.props;
         return (
             <div className="main-block">
                 {currentPage === PRODUCTS ? <h1>Список товаров</h1> : <h1>Корзина</h1>}
                 {
                     currentPage === PRODUCTS && (
                         <ProductsList
-                            changeOrderItemsCount={changeOrderItemsCount()}
+                            changeOrderItemsCount={changeOrderItemsCount} //refactor function call to passing
                             products={products}
                             orderItems={order.items}
                             changePage={changePage}
@@ -27,10 +27,11 @@ class App extends React.Component {
                 {
                     currentPage === SHOPPING_CART && (
                         <ShoppingCart
-                            changeOrderItemsCount={changeOrderItemsCount()}
+                            changeOrderItemsCount={changeOrderItemsCount} //refactor function call to passing
                             products={products}
                             orderItems={order.items}
                             changePage={changePage}
+
                         />
                     )
                 }
