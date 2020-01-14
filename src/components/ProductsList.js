@@ -1,9 +1,9 @@
 import React from "react";
-import {SHOPPING_CART} from "../actions/changePage";
-import {changePage} from "../actions/changePage";
+import {SHOPPING_CART} from "../redux/actions/changePage";
+import {changePage} from "../redux/actions/changePage";
 import {connect} from 'react-redux';
 import ProductsRow from "./ProductsRow";
-import {searchAction} from "../actions/filterSearch";
+import {searchAction} from "../redux/actions/filterSearch";
 
 class ProductsList extends React.Component {
     handleSearchOnChange = (event) => {
@@ -35,19 +35,19 @@ class ProductsList extends React.Component {
                 {
                     products
                         .filter(item => {
-                            return /*!!search && */item.name.toLowerCase().includes(search.toLowerCase())
+                            return item.name.toLowerCase().includes(search.toLowerCase())
                         })
                         .map((product, idx) => {
                             let orderItem = order.find(function (item) {
                                 return item.product.id === product.id;
                             });
-                        return <ProductsRow
-                            changeOrderItemsCount={changeOrderItemsCount}
-                            key={idx}
-                            item={product}
-                            count={!!orderItem ? orderItem.count : 0}
-                        />
-                    })
+                            return <ProductsRow
+                                changeOrderItemsCount={changeOrderItemsCount}
+                                key={idx}
+                                item={product}
+                                count={!!orderItem ? orderItem.count : 0}
+                            />
+                        })
                 }
                 <div className='d-flex justify-content-between'>
                     <button

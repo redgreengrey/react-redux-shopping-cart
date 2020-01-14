@@ -1,15 +1,14 @@
 import React from 'react';
-import {PRODUCTS, SHOPPING_CART} from "../actions/changePage";
+import {PRODUCTS, SHOPPING_CART} from "../redux/actions/changePage";
 import {connect} from 'react-redux';
-import {changeOrderItemsCount} from "../actions/changeOrderItemsCount";
-import {removeItemFromCart} from "../actions/removeFromShoppingCart";
+import {changeOrderItemsCount} from "../redux/actions/changeOrderItemsCount";
+import {removeItemFromCart} from "../redux/actions/removeFromShoppingCart";
 
 export class ProductsRow extends React.Component {
     handleIncreaseOnClick = () => {
         this.props.changeOrderItemsCount(1, this.props.item)
     };
     handleDecreaseOnClick = () => {
-        console.log(this.props.item);
         this.props.changeOrderItemsCount(-1, this.props.item.item)
     };
     handleRemoveItemFromCartOnClick = () => {
@@ -70,8 +69,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    changeOrderItemsCount: (increase, product) => (changeOrderItemsCount(increase, product)),  // refactor
-    removeItemFromCart: (id) => (removeItemFromCart(id)) //////////////////////////////////////// refactor
+    changeOrderItemsCount: (increase, product) => (changeOrderItemsCount(increase, product)),
+    removeItemFromCart: (id) => (removeItemFromCart(id))
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsRow)

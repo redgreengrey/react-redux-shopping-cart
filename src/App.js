@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
 import {connect} from 'react-redux';
-import {store} from "./index";
-import {initState} from "./actions/init";
+import {initState} from "./redux/actions/init";
 import ProductsList from './components/ProductsList';
-import {PRODUCTS, SHOPPING_CART, changePage} from "./actions/changePage";
+import {PRODUCTS, SHOPPING_CART, changePage} from "./redux/actions/changePage";
 import ShoppingCart from "./components/ShoppingCart";
-import {changeOrderItemsCount} from "./actions/changeOrderItemsCount";
+import {changeOrderItemsCount} from "./redux/actions/changeOrderItemsCount";
+
+import {rootLogicStore} from "./redux/appStore";
 
 class App extends React.Component {
     render() {
@@ -17,7 +18,7 @@ class App extends React.Component {
                 {
                     currentPage === PRODUCTS && (
                         <ProductsList
-                            changeOrderItemsCount={changeOrderItemsCount} //refactor function call to passing
+                            changeOrderItemsCount={changeOrderItemsCount}
                             products={products}
                             orderItems={order.items}
                             changePage={changePage}
@@ -27,7 +28,7 @@ class App extends React.Component {
                 {
                     currentPage === SHOPPING_CART && (
                         <ShoppingCart
-                            changeOrderItemsCount={changeOrderItemsCount} //refactor function call to passing
+                            changeOrderItemsCount={changeOrderItemsCount}
                             products={products}
                             orderItems={order.items}
                             changePage={changePage}
@@ -35,13 +36,12 @@ class App extends React.Component {
                         />
                     )
                 }
-
             </div>
         )
     }
 
     componentDidMount() {
-        store.dispatch(initState());
+        rootLogicStore.dispatch(initState());
     }
 }
 

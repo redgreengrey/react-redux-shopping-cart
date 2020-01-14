@@ -1,12 +1,10 @@
 import React from 'react'
 import ProductsRow from "./ProductsRow";
-import {PRODUCTS} from "../actions/changePage";
-import {changePage} from "../actions/changePage";
-import {changeOrderItemsCount} from "../actions/changeOrderItemsCount";
-import {clearShoppingCart} from "../actions/clearShoppingCart";
+import {PRODUCTS} from "../redux/actions/changePage";
+import {changePage} from "../redux/actions/changePage";
+import {changeOrderItemsCount} from "../redux/actions/changeOrderItemsCount";
+import {clearShoppingCart} from "../redux/actions/clearShoppingCart";
 import {connect} from 'react-redux';
-// import {store} from "../index";
-// import {removeItemFromCart} from "../actions/removeFromShoppingCart";
 
 export class ShoppingCart extends React.Component {
     getOrderTotal = function () {
